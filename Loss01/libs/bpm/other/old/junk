@@ -1,0 +1,39 @@
+
+if 0
+  ep = bpm_ep;
+  %ep = set_kernel(ep, 'linear',1);
+  %ep = set_kernel(ep, 'rbf');
+  ep = train(ep, X, Y);
+  draw(ep, 'color', 'green');
+  sep = struct(ep);
+  if isempty(sep.kernel)
+    sep.mw
+    sep.vw
+  elseif strcmp(sep.kernel,'linear')
+    mw = sep.X'*(sep.Y.*sep.alpha)
+    Xv = scale_rows(sep.X, 1./sep.state.v);
+    vw = inv(eye(cols(Xv)) + sep.X'*Xv)
+    mw = vw*((sep.state.m./sep.state.v.*sep.Y')*sep.X)'
+  end
+  predict(ep,X)
+  fprintf('train = %g\n', sep.train_err)
+  fprintf('loo = %g\n', sep.loo)
+  fprintf('loo_count = %g\n', sep.loo_count)
+  fprintf('evidence = %g\n', sep.s)
+  return
+end
+
+if 0
+  sep = struct(ep);
+  fprintf('stability = %g\n', sep.stability);
+  fprintf('LOO errprob = %g\n', sep.loo);
+end
+
+if 0
+% ARD
+ep = bpm_ep('probit',0);
+ep = set_kernel(ep, 'linear',1);
+[ep,run] = train_ard(ep, X, Y);
+%draw(ep, 'color', 'green');
+sep = struct(ep);
+end

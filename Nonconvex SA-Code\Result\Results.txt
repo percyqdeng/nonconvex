@@ -1,0 +1,19 @@
+     
+     
+********** Instance: SVM-n1000.mat      
+     
+*** Running RSG
+      Iteration limit :200
+     
+       Mean of squared norm of gradient : 2.2029     
+      Variance of squared norm of gradinet: 4.39e-01
+     
+      Average corresponding missclasification error: 48.78
+     
+*** Running RSG
+      Iteration limit :200
+     
+       Mean of squared norm of gradient : 2.2029     
+      Variance of squared norm of gradinet: 4.39e-01
+     
+      Average corresponding missclasification error: 48.78

@@ -1,0 +1,40 @@
+
+clc;
+
+N = 30;
+DMax = 6;
+LMax = 6;
+LMin = 4;
+NTests = 10;
+
+T1 = zeros(DMax, NTests);
+T2 = zeros(DMax, NTests);
+
+for D = 2:DMax
+    for k = 1:NTests
+        fprintf('Test #%d of %d \n', k, NTests);
+        [X,t] = generateTestData(N, D, [LMin LMax]);
+        X = normalizeData(X);
+        fprintf('Training data: N = %d, D = %d. \n', N, D);
+
+        tic, w = getWeightsByBranchAndBound4(X, t);
+        T1(D,k) = toc;
+        fprintf('BnB Loss: %d.\n', T1(d,k));
+
+        tic, w = getWeightsByPointsSelection2(X, t);
+        T2(D,k) = toc;
+        fprintf('CS Loss: %d.\n', T2(D,k));
+    end
+end
+
+figure(1);
+subplot(1,2,1);
+errorbar([mean(T(1,:)) mean(T(2,:))], [std(T(1,:)) std(T(2,:))], 'xb');
+set(gca,'XTickLabel',{'','CSA','','ALA',''});
+xlabel('Algorithms');
+ylabel('Average Running Time');
+subplot(1,2,2);
+errorbar([mean(L(1,:)) mean(L(2,:))], [std(L(1,:)) std(L(2,:))], 'xb');
+set(gca,'XTickLabel',{'','CSA','', 'ALA',''});
+xlabel('Algorithms');
+ylabel('Average 0-1 Loss Returned');
