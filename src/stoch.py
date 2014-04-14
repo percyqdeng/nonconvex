@@ -316,13 +316,20 @@ if __name__ == '__main__':
     lmd = .01
     choice = 0
     N = np.array((100, 500, 1000))
-    para = Para(1000)
 
+# self, w0, w_star, max_iter = 1000, S = 100, L=1, sig=1):
 #
     x0, y0, w_star, w0 = load_Ghadi_data(choice)
+
     L, sig = esti_para(x0, lmd)
+    S = 100
+    para = Para(w0,w_star,1000,S, L, sig)
+    ntr = N[choice]
+    ntest = 27600
+    (xtr, ytr, xte, yte, w0) = gen_syn('disc', ntr)
     (w, obj1, grads, R, sig, Df, acc_tr, gamma) = rsg(xtr, ytr, beta, lmd,  1, para)
 
+    
     plt.figure()
     plt.plot(range(1,R+1), obj1[1:R+1],'b')
 

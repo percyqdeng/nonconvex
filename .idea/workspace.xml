@@ -44,7 +44,7 @@
       <file leaf-file-name="stoch.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/stoch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="320" column="1" selection-start="8983" selection-end="8983" vertical-scroll-proportion="0.5852535" vertical-offset="4419" max-vertical-offset="5085">
+            <state line="331" column="4" selection-start="9337" selection-end="9337" vertical-scroll-proportion="0.74654377" vertical-offset="4479" max-vertical-offset="5190">
               <folding>
                 <element signature="e#81#111#0" expanded="true" />
               </folding>
@@ -779,7 +779,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/stoch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="320" column="1" selection-start="8983" selection-end="8983" vertical-scroll-proportion="0.5852535" vertical-offset="4419" max-vertical-offset="5085">
+        <state line="331" column="4" selection-start="9337" selection-end="9337" vertical-scroll-proportion="0.74654377" vertical-offset="4479" max-vertical-offset="5190">
           <folding>
             <element signature="e#81#111#0" expanded="true" />
           </folding>
