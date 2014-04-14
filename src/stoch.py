@@ -1,18 +1,49 @@
 __author__ = 'qdengpercy'
 
-from sklearn.ensemble import RandomForestClassifier
+# from sklearn.ensemble import RandomForestClassifier
 from numpy import linalg as LA
 import matplotlib.pyplot as plt
+import scipy.io
+# import Ipython.display as display
 import io
 import random as rand
 # from sigmoid import *
 import numpy as np
 class Para:
     max_iter = 1
+
     S = 1 # the number of rounds for randomized SA
-    def __init__(self, max_iter = 1000, S = 100):
+    def __init__(self, w0, w_star, max_iter = 1000, S = 100, L=1, sig=1):
         self.max_iter = max_iter
         self.S = S
+        self.L = L
+        self.sig = sig
+        self.w_star = w    #optimal value
+        self.w0 = w0    #initial value
+
+
+
+def esti_para(x,lmd):
+    '''
+    estimate parameter of sigmoid function 2-2/n*sum_x 1/(1+e^-wx), using a batch of data, each row of x is a feature
+    '''
+    (n, p) = x.shape
+    w = np.zeros(p)
+    z = np.dot(x, w)
+    H = 2 * np.dot(x.T, x)/n + lmd * np.eye(p)
+    L, v = LA.eig(H)
+    L = np.real(np.max(L))
+    std = np.var(x, axis=0)
+    sig = np.sqrt(np.sum(std))
+    return L, sig
+
+def sigmoid(x, w):
+    '''
+    sigmoid function 1/(1+e^-wx), each row of x is feature
+    '''
+    z = np.dot(x, w)
+    res = 1.0/(1+np.exp(-z))
+    return res
 
 def grad_sigmoid(x, w):
     '''
@@ -23,50 +54,22 @@ def grad_sigmoid(x, w):
     grad = np.dot(x.T, p*(1-p))
     return grad
 
-
-def esti_para(x):
-    '''
-    estimate parameter of sigmoid function sum_x 1/(1+e^-wx), using a batch of data, each row of x is a feature
-    '''
-    (n, p) = x.shape
-    w = np.zeros(p)
-    z = np.dot(x, w)
-    p = 1.0/(1+np.exp(-z))
-    # grad_mat = x*(p*(1-p))[:,np.newaxis]
-    # cov = np.cov(grad_mat,axis = 0)
-    # [e, v] = LA.eig(cov)
-    # h = p*(1-p)*(1-2*p)
-    H = np.dot(x.T, x)
-    L, v = LA.eig(H)
-    L = np.max(L)
-    avg = np.mean(x, axis=0)
-    x2 = x - avg[np.newaxis, :]
-    e = LA.norm(x2,2,axis=1)**2
-    sig = np.sqrt(np.mean(e))
-    return L, sig
-
-def sigmoid(x, w):
-    '''
-    sigmoid function 1/(1+e^-wx), each row of x is feature
-    '''
-    z = np.dot(x, w)
-    res = 1.0/np.exp(-z)
-    return res
-
-
 def rsg(x, y, beta, lmd, steprule, para):
+    '''
+    2- 2/n \sum 1/(1+exp(-b*y_n*x_n'w)) + lambda*w^2
+    '''
     (n, p) = x.shape
     N = para.max_iter
     z = x * y[:, np.newaxis]
     z *= beta
-    w = np.zeros(p)
-    batch = 100
-    ind = rand.sample(range(n), batch)
-    L, sig = esti_para(x[ind, :])
-    L /= batch
-    L += lmd
+    w = para.w0
+    L = para.L
+    sig = para.sig
+    # L, sig = esti_para(x[ind, :], lmd)
+
+
     print 'estimate L: '+str(L)+' sigma: '+str(sig)
-    obj0 = sigmoid(z, w).sum()/n
+    obj0 = 2 - 2*sigmoid(z, w).sum()/n +lmd * (w**2).sum()
     Df = np.sqrt(2 * obj0/L)
     Dt = Df
 
@@ -85,15 +88,17 @@ def rsg(x, y, beta, lmd, steprule, para):
 
     obj = np.zeros(R+1)
     grads = np.zeros(R+1)
-
+    acc = np.zeros(R+1)
+    bsize = 1
     for k in range(1, R+1):
         ik = np.random.randint(n)
-        zk = z[ik,:]
-        w = w - gamma[k] * (grad_sigmoid(zk[np.newaxis, :], w)+lmd*w)
-        obj[k] = sigmoid(z, w).sum()/n + lmd*LA.norm(w)**2
-        grad = grad_sigmoid(x, w)/n + lmd * w
+        zk = z[ik, :]
+        w -= gamma[k] * (-2*grad_sigmoid(zk[np.newaxis, :], w)/bsize+2*lmd*w)
+        obj[k] = 2 - 2*sigmoid(z, w).sum()/n + lmd*LA.norm(w)**2
+        acc[k] = np.mean(y == np.sign(np.dot(x, w)))
+        grad = -2*grad_sigmoid(z, w)/n + 2*lmd * w
         grads[k] = LA.norm(grad)
-    return w, obj, grads, R, sig, Df
+    return w, obj, grads, R, sig, Df, acc, gamma
 
 def rsg2(x, y, beta , lmd, steprule, para):
     # run rsg S times and return the optimal candidate
@@ -149,9 +154,11 @@ def rsg2v(x, y, beta, lmd, steprule, para):
     grads = np.zeros(R_sup+1)
     # phase 1, run SA
     i = 0
-    w_cand = np.zeros(S,p)
+    w_cand = np.zeros(S, p)
     for k in range(1, R_sup+1):
         ik = np.random.randint(n)
+        # generate samples
+        # xk, yk = sample_batch(p, para)
         zk = z[ik, :]
         w = w - gamma[k] * (grad_sigmoid(zk[np.newaxis, :], w)+lmd*w)
         if k in R:
@@ -176,7 +183,30 @@ def sa(x, y, beta, N, opt):
     z = x * y[:, np.newaxis]
     z *= beta
 
-def gen_syn(ftr_type, ntr, nte):
+def vis_sig(x, w0, beta=1, lmd=0.01):
+    '''
+    visualize sigmoid function
+    1/(1 + exp(-beta*x*w))
+    '''
+    n, p = x.shape
+    d = np.random.multivariate_normal(np.zeros(p),np.eye(p), 1)
+    d = np.squeeze(d)
+    eta = np.linspace(-10,10,100)
+    obj = np.zeros(len(eta))
+    for i, x in enumerate(eta):
+        w = w0 + d*eta
+        obj[i] = 1-sigmoid(x, w).sum()/n + lmd*LA.norm(w)**2
+    plt.title('visualize')
+    plt.plot(eta, obj)
+
+
+def sample_batch(n, p, para):
+    x = np.random.binomial(1, 0.05, (n,p))
+    x = np.squeeze(x)
+    y = np.sign(np.dot(x, w))
+    return x, y
+
+def gen_syn(ftr_type, ntr=100, nte=100):
     '''
     get synthetic dataset as in Ghadimi's paper
     '''
@@ -187,32 +217,46 @@ def gen_syn(ftr_type, ntr, nte):
     w = np.squeeze(w)
     w /= LA.norm(w, 1)
     if ftr_type == 'real':
-        x = np.random.multivariate_normal(mean, cov, ntr+nte)
+        # x = np.random.multivariate_normal(mean, cov, ntr+nte)
+        x = np.random.uniform(0, 1, (ntr+nte, p))
+        nz = np.random.binomial(1, 0.95, (ntr+nte, p))
+        x *= nz
         y = np.sign(np.dot(x, w))
         ytr = y[:ntr]
         yte = y[ntr:]
-        # add noise to data
-        noise = np.random.multivariate_normal(mean, 0.8*cov, ntr+nte)
-        x += noise
+
         xtr = x[:ntr, :]
         xte = x[ntr:, :]
-        yH = ytr[:, np.newaxis] * xtr
-        margin = np.min(np.dot(yH, w))
+        # yH = ytr[:, np.newaxis] * xtr
+        # margin = np.min(np.dot(yH, w))
     elif ftr_type == 'disc':
-        x = np.random.binomial(1, 0.95, (ntr+nte, p))
-        # x[x == 0] = -1
+        # binomial distribution with 0.05 sparse
+        x = np.random.binomial(1, 0.05, (ntr+nte, p))
         y = np.sign(np.dot(x, w))
         ytr = y[:ntr]
         yte = y[ntr:]
-        # add noise to data
-        # flips = np.random.binomial(1, 0.95, (ntr+nte, p))
-        # flips[flips == 0] = -1
-        # x *= flips
+
         xtr = x[:ntr, :]
         xte = x[ntr:, :]
-        yH = ytr[:, np.newaxis] * xtr
+        # yH = ytr[:, np.newaxis] * xtr
 
     return xtr, ytr, xte, yte, w
+def load_Ghadi_data(choice=1):
+    path = '../data/'
+    if choice ==0:
+        filename = "SVM-n100.mat"
+    elif choice == 1:
+        filename = "SVM-n500.mat"
+    else:
+        filename = "SVM-n1000.mat"
+
+    data = scipy.io.loadmat(path+filename)
+    w0 = np.squeeze(data['z_ini'])
+    w_star = np.squeeze(data['z_sample'])
+    xtr = data['estimate_matrix']
+    ytr = np.squeeze(data['estimate_lable'])
+    xtr = xtr.toarray()
+    return xtr, ytr,w_star, w0
 
 def debug_grad(x):
     '''
@@ -242,19 +286,49 @@ if __name__ == '__main__':
         toy test
             '''
 
-    ntr = 1000
-    nte = 10000
-    iters = 10000
-    beta = 1
-    lmd = .1
-    para = Para(iters)
-    (xtr, ytr, xte, yte, w) = gen_syn('disc', ntr, nte)
-    # res = debug_grad(xtr)
-    (w, obj1, grads, R, sig, Df) = rsg(xtr, ytr, beta, lmd,  1, para)
+    # ntr = 100
+    # nte = 10000
+    # iters = 1000
+    # beta = 2
+    # lmd = .01
+    # para = Para(iters)
+    # (xtr, ytr, xte, yte, w0) = gen_syn('disc', ntr, nte)
 
-    # R = len(obj1)
+
+    # z1 = np.dot(xtr,w0)
+    # vis_sig(xtr, w0, beta, lmd)
+    # # res = debug_grad(xtr)
+    # (w, obj1, grads, R, sig, Df, acc_tr, gamma) = rsg(xtr, ytr, beta, lmd,  1, para)
+    # # acc_tr0 = np.mean(ytr == np.sign(1/(1 + np.exp(np.dot(xtr, w)))-0.5))
+    # acc_te = np.mean(yte == np.sign(np.dot(xte, w)))
+    # # R = len(obj1)
+    # plt.figure()
+    # plt.plot(range(1,R+1), obj1[1:R+1],'b')
+    #
+    # plt.ylabel('obj')
+    # plt.figure()
+    # plt.plot(range(1,R+1), grads[1:R+1],'r')
+    # plt.ylabel('norm of gradient')
+    # plt.figure()
+    # plt.plot(range(1,R+1), acc_tr[1:R+1],'r')
+
+    beta = 2
+    lmd = .01
+    choice = 0
+    N = np.array((100, 500, 1000))
+    para = Para(1000)
+
+#
+    x0, y0, w_star, w0 = load_Ghadi_data(choice)
+    L, sig = esti_para(x0, lmd)
+    (w, obj1, grads, R, sig, Df, acc_tr, gamma) = rsg(xtr, ytr, beta, lmd,  1, para)
+
+    plt.figure()
     plt.plot(range(1,R+1), obj1[1:R+1],'b')
+
     plt.ylabel('obj')
     plt.figure()
     plt.plot(range(1,R+1), grads[1:R+1],'r')
     plt.ylabel('norm of gradient')
+    plt.figure()
+    plt.plot(range(1,R+1), acc_tr[1:R+1],'r')
