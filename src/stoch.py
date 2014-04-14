@@ -311,7 +311,7 @@ def plot_convergence():
     plt.subplot(2,2,3)
     plt.plot(range(1,R+1), acc_tr[1:R+1],'r')
     plt.ylabel('accuracy',fontsize=11)
-    plt.savefig('converg.eps')
+    plt.savefig('converg'+str(lmd)+'.eps')
              # plt.figure()
     # plt.plot(range(1,R+1), acc_tr[1:R+1],'r')
 
