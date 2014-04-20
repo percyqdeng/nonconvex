@@ -35,7 +35,7 @@
       <file leaf-file-name="sigmoid.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sigmoid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="0" selection-start="984" selection-end="984" vertical-scroll-proportion="0.0" vertical-offset="328" max-vertical-offset="1005">
+            <state line="40" column="0" selection-start="984" selection-end="984" vertical-scroll-proportion="0.0" vertical-offset="600" max-vertical-offset="1080">
               <folding />
             </state>
           </provider>
@@ -44,7 +44,7 @@
       <file leaf-file-name="stoch.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/stoch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="133" column="24" selection-start="3430" selection-end="3430" vertical-scroll-proportion="0.41474655" vertical-offset="1725" max-vertical-offset="6315">
+            <state line="274" column="40" selection-start="7413" selection-end="7413" vertical-scroll-proportion="0.31019202" vertical-offset="3900" max-vertical-offset="6315">
               <folding>
                 <element signature="e#81#111#0" expanded="true" />
                 <element signature="e#9080#9690#0" expanded="false" />
@@ -80,8 +80,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1689" />
-    <option name="y" value="143" />
+    <option name="x" value="1280" />
+    <option name="y" value="126" />
     <option name="width" value="1280" />
     <option name="height" value="774" />
   </component>
@@ -111,6 +111,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -139,11 +140,10 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../lda/py-sam" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../boost" />
     <property name="recentsLimit" value="5" />
     <property name="FullScreen" value="false" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PythonSdkConfigurable" />
@@ -372,13 +372,12 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1689" y="143" width="1280" height="774" extended-state="6" />
+    <frame x="1280" y="126" width="1280" height="774" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299566" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21015625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -388,10 +387,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299566" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -413,6 +413,13 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="41" selection-start="82" selection-end="252" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="315">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/stoch.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="44" column="37" selection-start="1185" selection-end="1185" vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="3855">
@@ -791,7 +798,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/stoch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="133" column="24" selection-start="3430" selection-end="3430" vertical-scroll-proportion="0.41474655" vertical-offset="1725" max-vertical-offset="6315">
+        <state line="274" column="40" selection-start="7413" selection-end="7413" vertical-scroll-proportion="0.31019202" vertical-offset="3900" max-vertical-offset="6315">
           <folding>
             <element signature="e#81#111#0" expanded="true" />
             <element signature="e#9080#9690#0" expanded="false" />
